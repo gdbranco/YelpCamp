@@ -1,0 +1,95 @@
+<% include ../partials/header %>
+<% include ../partials/flash-messages %>
+<div class="container">
+        <div class="row">
+                <div class="col-md-3">
+                        <p class="lead"><%=camp.name%></p>
+                        <div class="list-group">
+                                <li class="list-group-item active">Info 1</li>
+                                <li class="list-group-item">Info 2</li>
+                                <li class="list-group-item">Info 3</li>
+                        </div>
+                        <div id="map"></div>
+                </div>
+                <div class="col-md-9">
+                        <div class="card">
+                                <img class="card-img-top" src="<%= camp.image %>" alt="Card image cap">
+                                <div class="card-block">
+                                        <h4 class="pull-right">$<%=camp.price%>/night</h4>
+                                        <h4 class="card-title"><a href=""><%= camp.name %></a><br><small class="text-muted" style="font-size: 0.6em;">Submitted by <a href="/users/<%=camp.author.id%>"><%=camp.author.username%></a>, <%= moment(camp.createdAt).fromNow() %></small></h4>
+                                        <p class="card-text"><%- camp.desc %></p>
+                                </div>
+                        </div>
+                        <div class="card bg-faded">
+                                <div class="card-block">
+                                        <div class="row">
+                                                <div class="col-sm-3 center">
+                                                        <% if(currentUser && (currentUser.isAdmin || camp.author.id.equals(currentUser.id))){ %>
+                                                                <a href="/campgrounds/<%=camp._id%>/edit" class="btn btn-warning">Edit</a>
+                                                        <% } %>
+                                                </div>
+                                                <div class="col-sm-3 center">
+                                                        <a href="/campgrounds/<%=camp._id%>/comments/new" class="btn btn-info"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Comment</a>
+                                                </div>
+                                                <div class="col-sm-3 center">
+                                                        <% if(currentUser && (currentUser.isAdmin || camp.author.id.equals(currentUser.id))) { %>
+                                                        <form action="/campgrounds/<%=camp._id%>?_method=DELETE" method="POST">
+                                                                <button class="btn btn-danger">Delete</button>
+                                                        </form>
+                                                        <% } %>
+                                                </div>
+                                        </div>
+                                </div>
+                                <% var d = new Date(); var userTimezoneOffset = d.getTimezoneOffset() * 60000; %>
+                                <% camp.comments.forEach(function(comment){ %>
+                                        <div class="row">
+                                                <div class="col-md-12">
+                                                        <div class="card">
+                                                                <div class="card-block">
+                                                                        <span><small class="text-muted pull-right"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;<%=moment(comment.date).fromNow()%></small>
+                                                                        <span class="card-title"><strong><%=comment.author.username%></strong></span></span>
+                                                                        <p class="card-text"><%=comment.text%></p>
+                                                                        <% if(currentUser && (currentUser.isAdmin || comment.author.id.equals(currentUser.id))) { %>
+                                                                        <form action="/campgrounds/<%=camp._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
+                                                                               <button class="btn btn-sm btn-danger pull-right">Delete</button>
+                                                                        </form>
+                                                                        <a class="btn btn-sm btn-warning pull-right" href="/campgrounds/<%=camp._id%>/comments/<%=comment._id%>/edit">Edit</a>
+                                                                        <% } %>
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                <% }) %>  
+                        </div>
+                </div>
+        </div>
+</div>
+<script>
+  function initMap() {
+    var lat = <%= camp.lat %>;
+    var lng = <%= camp.lng %>;
+    var center = {lat: lat, lng: lng };
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 8,
+        center: center,
+        scrollwheel: false
+    });
+    var contentString = `
+      <strong><%= camp.name %><br />
+      <%= camp.location %></strong>
+      <p><%= camp.description %></p>
+    `
+    var infowindow = new google.maps.InfoWindow({
+      content: contentString
+    });
+    var marker = new google.maps.Marker({
+        position: center,
+        map: map
+    });
+    marker.addListener('click', function() {
+      infowindow.open(map, marker);
+    });
+  }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2Z50oFYL0Y7M7A4MZvdiYGusuEVKC9f0&callback=initMap"></script>
+<% include ../partials/footer %>

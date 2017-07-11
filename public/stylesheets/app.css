@@ -1,0 +1,174 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; }
+
+button {
+  cursor: pointer;
+  margin: 0 2px 0 2px; }
+
+html, body {
+  height: 100%;
+  background-color: #f2f2f2;
+  font-size: 16px; }
+
+form {
+  margin-top: 5px; }
+
+.clear {
+  clear: both; }
+
+.text-center {
+  text-align: center; }
+
+.center {
+  margin: 0 auto; }
+
+.card {
+  margin: 5px; }
+
+img {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  width: 100%;
+  object-fit: cover; }
+
+#map {
+  margin-top: 5px;
+  border-radius: 5px;
+  height: 400px;
+  width: 100%; }
+
+.landing {
+  height: 100%;
+  width: 100%;
+  background-color: black; }
+  .landing #landing-header {
+    z-index: 1;
+    position: relative;
+    text-align: center;
+    margin: 0 auto;
+    padding-top: 40vh;
+    color: #f2f2f2; }
+    .landing #landing-header .jumbotron {
+      background-color: rgba(0, 0, 0, 0.2); }
+  .landing #landing-slideshow {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0; }
+    .landing #landing-slideshow li {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-size: cover;
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+      opacity: 0;
+      z-index: 0;
+      animation: imageAnimation 50s linear infinite; }
+      .landing #landing-slideshow li:nth-child(1) {
+        background-image: url(https://i.imgur.com/K3mPv14.jpg); }
+      .landing #landing-slideshow li:nth-child(2) {
+        background-image: url(https://i.imgur.com/SBEmFpv.jpg);
+        animation-delay: 10s; }
+      .landing #landing-slideshow li:nth-child(3) {
+        background-image: url(https://i.imgur.com/emvhOnb.jpg);
+        animation-delay: 20s; }
+      .landing #landing-slideshow li:nth-child(4) {
+        background-image: url(https://i.imgur.com/2LSMCmJ.jpg);
+        animation-delay: 30s; }
+      .landing #landing-slideshow li:nth-child(5) {
+        background-image: url(https://i.imgur.com/TVGe0Ef.jpg);
+        animation-delay: 40s; }
+
+@-webkit-keyframes imageAnimation {
+  0% {
+    opacity: 0;
+    animation-timing-function: ease-in; }
+  10% {
+    opacity: 1;
+    animation-timing-function: ease-out; }
+  20% {
+    opacity: 1; }
+  30% {
+    opacity: 0; } }
+
+@-moz-keyframes imageAnimation {
+  0% {
+    opacity: 0;
+    animation-timing-function: ease-in; }
+  10% {
+    opacity: 1;
+    animation-timing-function: ease-out; }
+  20% {
+    opacity: 1; }
+  30% {
+    opacity: 0; } }
+
+@-ms-keyframes imageAnimation {
+  .landing #landing-slideshow li 0% {
+    opacity: 0;
+    animation-timing-function: ease-in; }
+  .landing #landing-slideshow li 10% {
+    opacity: 1;
+    animation-timing-function: ease-out; }
+  .landing #landing-slideshow li 20% {
+    opacity: 1; }
+  .landing #landing-slideshow li 30% {
+    opacity: 0; } }
+
+@keyframes imageAnimation {
+  0% {
+    opacity: 0;
+    animation-timing-function: ease-in; }
+  10% {
+    opacity: 1;
+    animation-timing-function: ease-out; }
+  20% {
+    opacity: 1; }
+  30% {
+    opacity: 0; } }
+
+/* Older browser support - .no-cssanimations class added by modernizr */
+.no-cssanimations .slideshow li {
+  opacity: 1; }
+
+/**SHOW CAMP**/
+.container-showCamp {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 10px; }
+  .container-showCamp .camp-name {
+    text-align: left; }
+  .container-showCamp .camp-image img {
+    border-radius: 8px;
+    width: 100%; }
+  .container-showCamp .camp-description {
+    margin: 10px;
+    font-size: 20px; }
+
+/**FOOTER**/
+.container-footer {
+  width: 100%;
+  background-color: #ccc;
+  margin: 10px;
+  padding: 10px 15px;
+  color: black;
+  text-align: center; }
+  .container-footer span {
+    color: black; }
+  .container-footer .extras {
+    width: 100%;
+    display: block; }
+    .container-footer .extras a {
+      outline: 0;
+      text-decoration: none; }

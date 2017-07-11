@@ -1,0 +1,36 @@
+<% include ../partials/header %>
+<% include ../partials/flash-messages %>
+        <div class="container">
+                <header>
+                        <div class="jumbotron">
+                                <div class="container">
+                                      <h1>THIS IS THE CAMPGROUND'S PAGE</h1>
+                                      <p>View our handpicked camps from all over the world</p>
+                                      <% if(currentUser) {%>
+                                      <a href="/campgrounds/new"><button class="btn btn-primary btn-lg">Add new camp</button></a>
+                                      <% } %>
+                                      <form action="/campgrounds" method="get" class="form-inline">
+                                              <div class="form-group">
+                                                      <input type="text" name="search" placeholder="Campground search..." class="form-control">
+                                                      <button type="submit" class="btn btn-secondary">Search</button>
+                                              </div>
+                                      </form>
+                              </div>
+                        </div>
+                </header>
+                <div class="row text-center" style="display:flex; flex-wrap: wrap;">
+                       <% campgrounds.forEach(function(camp) { %>
+                       <div class="col-md-3">
+                                <div class="card bg-faded">
+                                        <img class="card-img-top" src="<%= camp.image %>" alt="Card image cap">
+                                        <div class="card-block">
+                                                <h4 class="card-title"><%= camp.name %></h4>
+                                                <a href="/campgrounds/<%= camp._id %>"><button class="btn btn-outline-primary">More info</button></a>
+                                        </div>
+                                </div>
+                                
+                                </div>
+                        <% }); %> 
+                </div>
+        </div>
+<% include ../partials/footer %>
