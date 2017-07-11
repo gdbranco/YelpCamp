@@ -24,8 +24,8 @@ var session               = expressSession({
                             });
 // MONGOOSE SETUP
 var mongoose              = require("mongoose");
-mongoose.connect("mongodb://localhost/yelpcamp");
-//mongoose.connect("process.env.MONGOLAB_URI");
+//mongoose.connect("mongodb://localhost/yelpcamp");
+mongoose.connect("process.env.MONGOLAB_URI");
 
 mongoose.Promise = global.Promise;
 //====================
