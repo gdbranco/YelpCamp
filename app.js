@@ -24,7 +24,9 @@ var session               = expressSession({
                             });
 // MONGOOSE SETUP
 var mongoose              = require("mongoose");
-mongoose.connect("mongodb://localhost/yelpcamp");
+//mongoose.connect("mongodb://localhost/yelpcamp");
+mongoose.connect("mongodb://dbranco:badqwe123@ds147882.mlab.com:47882/yelpcamp");
+
 mongoose.Promise = global.Promise;
 //====================
 // IMPORT MODELS
