@@ -39,6 +39,7 @@ router.post("/",middleware.isLogged,function(req, res){
                         //link comment to camp
                         comment.author.id = req.user._id;
                         comment.author.username = req.user.username;
+                        comment.author.image = req.user.image;
                         comment.save();
                         found.comments.push(comment);
                         found.save();

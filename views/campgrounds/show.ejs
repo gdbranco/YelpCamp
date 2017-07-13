@@ -16,7 +16,7 @@
                                 <img class="card-img-top" src="<%= camp.image %>" alt="Card image cap">
                                 <div class="card-block">
                                         <h4 class="pull-right">$<%=camp.price%>/night</h4>
-                                        <h4 class="card-title"><a href=""><%= camp.name %></a><br><small class="text-muted" style="font-size: 0.6em;">Submitted by <a href="/users/<%=camp.author.id%>"><%=camp.author.username%></a>, <%= moment(camp.createdAt).fromNow() %></small></h4>
+                                        <h4 class="card-title"><a href=""><%= camp.name %></a><br><small class="text-muted" style="font-size: 0.6em;">Submitted by <a href="/profile/<%=camp.author.id%>"><%=camp.author.username%></a>, <%= moment(camp.createdAt).fromNow() %></small></h4>
                                         <p class="card-text"><%- camp.desc %></p>
                                 </div>
                         </div>
@@ -47,7 +47,7 @@
                                                         <div class="card">
                                                                 <div class="card-block">
                                                                         <span><small class="text-muted pull-right"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;<%=moment(comment.date).fromNow()%></small>
-                                                                        <span class="card-title"><strong><%=comment.author.username%></strong></span></span>
+                                                                        <span class="card-title"><strong><a href="/profile/<%=comment.author.id%>"><img style="max-width: 32px; border-radius: 50%;" src="<%=comment.author.image%>" alt="Author profile image">&nbsp;<%=comment.author.username%></a></strong></span></span>
                                                                         <p class="card-text"><%=comment.text%></p>
                                                                         <% if(currentUser && (currentUser.isAdmin || comment.author.id.equals(currentUser.id))) { %>
                                                                         <form action="/campgrounds/<%=camp._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">

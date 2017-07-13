@@ -25,7 +25,8 @@ var session               = expressSession({
 // MONGOOSE SETUP
 var mongoose              = require("mongoose");
 
-mongoose.connect(process.env.MONGOLAB_URI);
+var url = process.env.MONGOLAB_URI || "mongodb://localhost/yelpcamp";
+mongoose.connect(url);
 
 mongoose.Promise = global.Promise;
 //====================
@@ -91,8 +92,10 @@ var authRoutes = require("./routes/auth");
 var campgroundRoutes = require("./routes/campgrounds");
 var commentRoutes = require("./routes/comments");
 var errorRoutes = require("./routes/404");
+var profileRoutes = require("./routes/profiles");
 app.use("/",indexRoutes);
 app.use(authRoutes);
+app.use("/profile",profileRoutes);
 app.use("/campgrounds",campgroundRoutes);
 app.use("/campgrounds/:id/comments",commentRoutes);
 app.use(errorRoutes);

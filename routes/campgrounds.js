@@ -100,7 +100,7 @@ router.get("/:id/edit",middleware.checkCampOwner,function(req, res) {
        {
            console.log(error);
            req.flash("error","Something went wrong");
-           return res.redirect("/campgrounds/"+req.paras.id+"/edit");
+           return res.redirect("/campgrounds/"+req.params.id+"/edit");
        }
        res.render("campgrounds/edit",{camp:found});
     });

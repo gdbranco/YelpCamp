@@ -27,6 +27,12 @@ form {
 .card {
   margin: 5px; }
 
+a {
+  text-decoration: none; }
+
+.active a {
+  color: white; }
+
 img {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;

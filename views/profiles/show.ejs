@@ -1,0 +1,42 @@
+<% include ../partials/header%>
+<% include ../partials/flash-messages%>
+<div class="container-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <p class="lead"><%=user.username%></p>
+                <div class="list-group">
+                    <li class="list-group-item active"><a href="/profile/<%=user._id%>">Info</a></li>
+                    <% if (currentUser && (currentUser.id == user._id)) { %>
+                    <li class="list-group-item"><a href="/profile/<%=user._id%>/edit">Edit</a></li>
+                    <form action="/profile/<%=user._id%>?_method=DELETE" method="post">
+                            <button class="btn btn-danger">Delete</button>
+                    </form>
+                    <% } %>
+                </div>
+                <img src="<%= user.image %>" alt="User profile image">
+            </div>
+            <div class="col-md-9">
+                <% if(currentUser && (currentUser.id == user._id)) { %>
+                <h1>Welcome, <%=user.first%> <%=user.last%></h1>
+                <% } %>
+                <h2>Campgrounds created by <%= user.username %></h2>
+                <div class="row text-center" style="display:flex; flex-wrap: wrap;">
+                       <% camps.forEach(function(camp) { %>
+                       <div class="col-md-3">
+                                <div class="card bg-faded">
+                                        <img class="card-img-top" src="<%= camp.image %>" alt="Card image cap">
+                                        <div class="card-block">
+                                                <h4 class="card-title"><%= camp.name %></h4>
+                                                <a href="/campgrounds/<%= camp._id %>"><button class="btn btn-outline-primary">More info</button></a>
+                                        </div>
+                                </div>
+                                
+                                </div>
+                        <% }); %> 
+                </div>
+            </div>                
+        </div>
+    </div>
+</div>
+<% include ../partials/footer%>

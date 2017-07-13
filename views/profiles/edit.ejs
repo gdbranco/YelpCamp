@@ -1,0 +1,52 @@
+<% include ../partials/header%>
+<% include ../partials/flash-messages%>
+<div class="container-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <p class="lead"><%=user.username%></p>
+                <div class="list-group">
+                    <li class="list-group-item active"><a href="/profile/<%=user._id%>">Info</a></li>
+                    <% if (currentUser && (currentUser.id == user._id)) { %>
+                    <li class="list-group-item"><a href="/profile/<%=user._id%>/edit">Edit</a></li>
+                    <form action="/profile/<%=user._id%>?_method=DELETE" method="post">
+                            <button class="btn btn-danger">Delete</button>
+                    </form>
+                    <% } %>
+                </div>
+                <img src="<%= user.image %>" alt="User profile image">
+            </div>
+            <div class="col-md-9">
+                Welcome, <%=user.first%> <%=user.last%>
+                <form action="/profile/<%=user._id%>?_method=PUT" method="post">
+                       <div class="form-group row">
+                              <label for="inputProfileFirst" class="col-sm-2 col-form-label">First Name</label>
+                              <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputProfileFirst" name="profile[first]" value="<%= user.first %>">
+                              </div>
+                        </div>
+                        <div class="form-group row">
+                              <label for="inputProfileLast" class="col-sm-2 col-form-label">Last Name</label>
+                              <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputProfileLast" name="profile[last]" value="<%= user.last %>">
+                              </div>
+                        </div>
+                        <div class="form-group row">
+                              <label for="inputProfileEmail" class="col-sm-2 col-form-label">Email</label>
+                              <div class="col-sm-10">
+                                <input type="email" class="form-control" id="inputProfileEmail" name="profile[email]" value="<%= user.email %>">
+                              </div>
+                        </div>
+                        <div class="form-group row">
+                              <label for="inputProfileImage" class="col-sm-2 col-form-label">Image</label>
+                              <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputProfileImage" name="profile[image]" value="<%= user.image %>">
+                              </div>
+                        </div>
+                        <button class="btn btn-lg btn-success" type="submit">Update</button>
+                </form>
+            </div>                
+        </div>
+    </div>
+</div>
+<% include ../partials/footer%>

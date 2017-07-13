@@ -1,5 +1,6 @@
 var Campground = require("../models/campground");
 var Comment = require("../models/comment");
+var User = require("../models/user");
 
 var middlewareObj = {
         logout: function(req,res,next){
@@ -17,6 +18,23 @@ var middlewareObj = {
                        return res.redirect("/login"); 
                 }
                 next();
+        },
+        checkProfileOwner: function(req,res,next){
+                if(!req.isAuthenticated()){
+                        req.flash("error","Please, login first.");
+                        return res.redirect("back");
+                }
+                User.findById(req.params.id,function(error,found){
+                        if(error){
+                                req.flash("error","User not found;");
+                                return res.redirect("back");
+                        }
+                        if(!found._id.equals(req.user._id)){
+                                req.flash("error","You don't have permission for that");
+                                return res.redirect("back");
+                        }
+                        next();
+                });
         },
         checkCampOwner: function(req,res,next){
                 if(!req.isAuthenticated()){
