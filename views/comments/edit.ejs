@@ -3,7 +3,7 @@
 <div class="container">
                 <h1 class="text-center">Edit comment</h1>
                 <div class="center">
-                        <form action="/campgrounds/<%=camp_id%>/comments/<%=comment._id%>?_method=PUT" method="post">
+                        <form action="/campgrounds/<%=camp._id%>/comments/<%=comment._id%>?_method=PUT" method="post">
                                 <div class="form-group row">
                                       <div class="col-sm-12">
                                         <textarea type="text" class="form-control" id="inputCommentText" name="comment[text]"><%=comment.text%></textarea>
@@ -14,7 +14,7 @@
                                 </div>
                         </form>
                         <div class="form-group form-inline">
-                                <a href="/campgrounds/<%=camp_id%>">Go Back</a>        
+                                <a href="/campgrounds/<%=camp._id%>">Go Back</a>        
                         </div>
                 </div>
 </div>

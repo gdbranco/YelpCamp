@@ -29,7 +29,7 @@
                                                         <% } %>
                                                 </div>
                                                 <div class="col-sm-3 center">
-                                                        <a href="/campgrounds/<%=camp._id%>/comments/new" class="btn btn-info"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Comment</a>
+                                                        <button id="button_comment-add" class="btn btn-info"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Comment</button>
                                                 </div>
                                                 <div class="col-sm-3 center">
                                                         <% if(currentUser && (currentUser.isAdmin || camp.author.id.equals(currentUser.id))) { %>
@@ -40,26 +40,52 @@
                                                 </div>
                                         </div>
                                 </div>
+                                <div class="container">
+                                        <form id="form_comment-new" action="/campgrounds/<%=camp._id%>/comments" method="post">
+                                                <div class="form-group row">
+                                                      <div class="col-sm-12">
+                                                        <textarea type="text" class="form-control" id="inputCommentText" name="comment[text]" placeholder="Insert Comment"></textarea>
+                                                      </div>
+                                                </div>
+                                                <div class="form-group">
+                                                <button type="submit" class="btn btn-success btn-block">Add</button>
+                                                </div>
+                                        </form>
+                                </div>
                                 <% var d = new Date(); var userTimezoneOffset = d.getTimezoneOffset() * 60000; %>
-                                <% camp.comments.forEach(function(comment){ %>
-                                        <div class="row">
-                                                <div class="col-md-12">
-                                                        <div class="card">
-                                                                <div class="card-block">
-                                                                        <span><small class="text-muted pull-right"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;<%=moment(comment.date).fromNow()%></small>
-                                                                        <span class="card-title"><strong><a href="/profile/<%=comment.author.id%>"><img style="max-width: 32px; border-radius: 50%;" src="<%=comment.author.image%>" alt="Author profile image">&nbsp;<%=comment.author.username%></a></strong></span></span>
-                                                                        <p class="card-text"><%=comment.text%></p>
-                                                                        <% if(currentUser && (currentUser.isAdmin || comment.author.id.equals(currentUser.id))) { %>
-                                                                        <form action="/campgrounds/<%=camp._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
-                                                                               <button class="btn btn-sm btn-danger pull-right">Delete</button>
-                                                                        </form>
-                                                                        <a class="btn btn-sm btn-warning pull-right" href="/campgrounds/<%=camp._id%>/comments/<%=comment._id%>/edit">Edit</a>
-                                                                        <% } %>
+                                <div id="comments-list">
+                                        <% camp.comments.forEach(function(comment){ %>
+                                                <div class="row">
+                                                        <div class="col-md-12">
+                                                                <div class="card">
+                                                                        <div class="card-block">
+                                                                                <span><small class="text-muted pull-right"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;<%=moment(comment.date).fromNow()%></small>
+                                                                                <span class="card-title"><strong><a href="/profile/<%=comment.author.id%>"><img style="max-width: 32px; border-radius: 50%;" src="<%=comment.author.image%>" alt="Author profile image">&nbsp;<%=comment.author.username%></a></strong></span></span>
+                                                                                <p class="card-text"><%=comment.text%></p>
+                                                                                <% if(currentUser && (currentUser.isAdmin || comment.author.id.equals(currentUser.id))) { %>
+                                                                                <form class="form_comment-delete" action="/campgrounds/<%=camp._id%>/comments/<%=comment._id%>" method="POST">
+                                                                                       <button class="btn btn-sm btn-danger pull-right">Delete</button>
+                                                                                </form>
+                                                                                <button class="btn btn-sm btn-warning pull-right button-edit">Edit</button>
+                                                                                <% } %>
+                                                                        </div>
+                                                                         <div class="container">
+                                                                                <form class="form_comment-edit" action="/campgrounds/<%=camp._id%>/comments/<%=comment._id%>" method="post">
+                                                                                        <div class="form-group row">
+                                                                                              <div class="col-sm-12">
+                                                                                                <textarea type="text" class="form-control" id="inputCommentText" name="comment[text]"><%=comment.text%></textarea>
+                                                                                              </div>
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                        <button type="submit" class="btn btn-success btn-block">Update</button>
+                                                                                        </div>
+                                                                                </form>
+                                                                        </div>
                                                                 </div>
                                                         </div>
                                                 </div>
-                                        </div>
-                                <% }) %>  
+                                        <% }) %>
+                                </div>
                         </div>
                 </div>
         </div>

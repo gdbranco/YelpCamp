@@ -44,23 +44,24 @@ router.get("/:id/edit",middleware.checkProfileOwner,function(req, res) {
 //UPDATE USER - update info of a certain user
 router.put("/:id",middleware.checkProfileOwner,function(req,res){
     var newData = {first: req.body.profile.first, last: req.body.profile.last, email: req.body.profile.email, image: req.body.profile.image};
-        User.findByIdAndUpdate(req.params.id,{$set: newData},function(error,updated){
+        User.findByIdAndUpdate(req.params.id,{$set: newData},{new: true},function(error,updated){
             if(error)
             {
                 console.log(error);
                 req.flash("error","Something went wrong");
                 return res.redirect("back");
             }
-            Comment.find({"author.id":updated._id},function(error,comment_found){
+            Comment.find({"author.id":updated._id},{new:true},function(error,comment_found){
                 if(error){
                     console.log(error);
                     req.flash("error","Something went wrong");
                     return res.redirect("back");
                 }
+                
                 comment_found.forEach(function(comment){
-                    comment.author.image = updated.image;
-                    comment.save();
-                })
+                        comment.author.image = comment_found.image;
+                        comment.save();
+                });
                 req.flash("success","User updated.");
                 res.redirect("/profile/" + req.params.id);
            });

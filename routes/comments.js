@@ -45,7 +45,11 @@ router.post("/",middleware.isLogged,function(req, res){
                         found.save();
                         //redirect to comments of id
                         req.flash("success","Comment created");
+                        if(req.xhr){
+                                res.json(comment);
+                        }else{
                         res.redirect("/campgrounds/"+req.params.id);
+                        }
                 });
         });
         
@@ -66,25 +70,34 @@ router.get("/:comment_id/edit",middleware.checkCommentOwner,function(req,res){
 //UPDATE ROUTE
 router.put("/:comment_id",middleware.checkCommentOwner,function(req,res){
         req.body.comment.text = req.sanitize(req.body.comment.text);
-        Comment.findByIdAndUpdate(req.params.comment_id,req.body.comment,function(error,updated){
+        Comment.findByIdAndUpdate(req.params.comment_id,req.body.comment,{new: true},function(error,updated){
                 if(error){
                         req.flash("error","Something went wrong");
                         return res.redirect("back");
                 }
                 req.flash("success","Comment updated.");
+                if(req.xhr){
+                        res.json(updated);
+                }else{
                 res.redirect("/campgrounds/"+req.params.id);
+                }
         });
 });
 
 //DELETE ROUTE
 router.delete("/:comment_id",middleware.checkCommentOwner,function(req,res){
-      Comment.findByIdAndRemove(req.params.comment_id,function(error){
+      Comment.findByIdAndRemove(req.params.comment_id,function(error,removed){
               if(error){
                       req.flash("error","Something went wrong");
                       return res.redirect("back");
               }
               req.flash("success","Comment deleted.");
+              if(req.xhr){
+                      res.json(removed);
+              }else{
               res.redirect("/campgrounds/"+req.params.id);
+                      
+              }
       })  
 });
 

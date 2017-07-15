@@ -1,7 +1,9 @@
 var express = require("express");
 var router = express.Router();
 var Campground = require("../models/campground");
+var Comment = require("../models/comment");
 var middleware = require("../middleware");
+var moment = require("moment");
 var geocoder = require("geocoder");
 
 function escapeRegex(text){
@@ -82,13 +84,14 @@ router.post("/",middleware.isLogged,function(req,res){
 
 //SHOW CAMPGROUND - show info of a certain campground
 router.get("/:id",function(req, res) {
-        Campground.findById(req.params.id).populate({path:"comments",sort:{"date":-1}}).exec(function(error, found){
+        Campground.findById(req.params.id).populate({path:"comments"}).exec(function(error, found){
                 if(error)
                 {
                    console.log(error);
                    req.flash("error","Something went wrong");
                    return res.redirect("back");
                 }
+                found.comments.sort(function(l,r){return moment.utc(r.date).diff(moment.utc(l.date))});
                 res.render("campgrounds/show",{camp: found});
         });
 });
@@ -134,13 +137,22 @@ router.put("/:id",middleware.checkCampOwner,function(req,res){
 
 //DELETE CAMPGROUND - delete info of a certain campground
 router.delete("/:id",middleware.checkCampOwner,function(req,res){
-    Campground.findByIdAndRemove(req.params.id,function(error){
+    Campground.findByIdAndRemove(req.params.id,function(error,removed){
        if(error)
        {
            console.log(error);
            req.flash("error","Something went wrong");
-           return res.redirect("/campgrounds/"+req.params.id);
+           return res.redirect("back");
        }
+       removed.comments.forEach(function(comment){
+          Comment.findByIdAndRemove(comment.id,function(error){
+              if(error){
+                  console.log(error);
+                  req.flash("error","Something went wrong");
+                  return res.redirect("back");
+              }
+          }) 
+       });
        req.flash("success","Campground removed.");
        res.redirect("/campgrounds");
     });
