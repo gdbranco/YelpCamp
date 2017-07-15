@@ -51,7 +51,7 @@ router.put("/:id",middleware.checkProfileOwner,function(req,res){
                 req.flash("error","Something went wrong");
                 return res.redirect("back");
             }
-            Comment.find({"author.id":updated._id},{new:true},function(error,comment_found){
+            Comment.find({"author.id":updated._id},function(error,comment_found){
                 if(error){
                     console.log(error);
                     req.flash("error","Something went wrong");
@@ -59,7 +59,7 @@ router.put("/:id",middleware.checkProfileOwner,function(req,res){
                 }
                 
                 comment_found.forEach(function(comment){
-                        comment.author.image = comment_found.image;
+                        comment.author.image = updated.image;
                         comment.save();
                 });
                 req.flash("success","User updated.");

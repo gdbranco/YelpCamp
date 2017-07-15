@@ -49,7 +49,6 @@ $("#form_comment-new").submit(function(event){
 });
 
 $("#comments-list").on('click', '.button-edit', function(){
-        alert("edit clicked");
    $(this).parent().parent().find('.form_comment-edit').slideToggle();
 });
 
