@@ -42,6 +42,14 @@ var User                  = require("./models/user"); //need the user for passpo
 // APP START
 var app = express();
 
+//CORS
+// app.use(function(req,res,next){
+//   res.header("Access-Control-Allow-Origin", "url"); 
+//   res.header("Acces-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   res.header("Acces-Control-Allow-Headers", "GET, POST, PUT, DELETE");
+//   next();
+// });
+//FLASH SETUP
 app.use(flash());
 // SASS SETUP
  app.use(
