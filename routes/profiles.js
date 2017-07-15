@@ -45,7 +45,6 @@ router.get("/:id/edit",middleware.checkProfileOwner,function(req, res) {
 router.put("/:id",middleware.checkProfileOwner,function(req,res){
     var newData = {first: req.body.profile.first, last: req.body.profile.last, email: req.body.profile.email, image: req.body.profile.image};
         User.findByIdAndUpdate(req.params.id,{$set: newData},{new: true},function(error,updated){
-                alert("sobe");
             if(error)
             {
                 console.log(error);
