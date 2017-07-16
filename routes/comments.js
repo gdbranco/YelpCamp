@@ -46,7 +46,7 @@ router.post("/",middleware.isLogged,function(req, res){
                         //redirect to comments of id
                         req.flash("success","Comment created");
                         if(req.xhr){
-                                res.json(comment);
+                                res.json({comment: comment, camp: found});
                         }else{
                         res.redirect("/campgrounds/"+req.params.id);
                         }
@@ -77,7 +77,7 @@ router.put("/:comment_id",middleware.checkCommentOwner,function(req,res){
                 }
                 req.flash("success","Comment updated.");
                 if(req.xhr){
-                        res.json(updated);
+                        res.json({comment: updated, camp_id: req.params.id});
                 }else{
                 res.redirect("/campgrounds/"+req.params.id);
                 }

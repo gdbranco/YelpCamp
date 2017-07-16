@@ -10,7 +10,6 @@ $("#form_comment-new").submit(function(event){
    event.preventDefault();     
    var formData = $(this).serialize();
    var formAction = $(this).attr('action');
-   var aFormAction = formAction.split('/');
    $.post(formAction, formData, function(data){
            $("#comments-list").prepend(
                `
@@ -18,19 +17,19 @@ $("#form_comment-new").submit(function(event){
                        <div class="col-md-12">
                                <div class="card">
                                        <div class="card-block">
-                                               <span><small class="text-muted pull-right"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;${moment(data.date).fromNow()}</small>
-                                               <span class="card-title"><strong><a href="/profile/${data.author.id}"><img style="max-width: 32px; border-radius: 50%;" src="${data.author.image}" alt="Author profile image">&nbsp;${data.author.username}</a></strong></span></span>
-                                               <p class="card-text">${data.text}</p>
-                                               <form class="form_comment-delete" action="/campgrounds/${aFormAction[2]}/comments/${data._id}" method="POST">
+                                               <span><small class="text-muted pull-right"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;${moment(data.comment.date).fromNow()}</small>
+                                               <span class="card-title"><strong><a href="/profile/${data.comment.author.id}"><img style="max-width: 32px; border-radius: 50%;" src="${data.comment.author.image}" alt="Author profile image">&nbsp;${data.comment.author.username}</a></strong></span></span>
+                                               <p class="card-text">${data.comment.text}</p>
+                                               <form class="form_comment-delete" action="/campgrounds/${data.camp._id}/comments/${data.comment._id}" method="POST">
                                                       <button class="btn btn-sm btn-danger pull-right">Delete</button>
                                                 </form>
                                                 <button class="btn btn-sm btn-warning pull-right button-edit">Edit</button>
                                        </div>
                                        <div class="container">
-                                               <form class="form_comment-edit" action="/campgrounds/${aFormAction[2]}/comments/${data._id}" method="post">
+                                               <form class="form_comment-edit" action="/campgrounds/${data.camp._id}/comments/${data.comment._id}" method="post">
                                                        <div class="form-group row">
                                                              <div class="col-sm-12">
-                                                               <textarea type="text" class="form-control" id="inputCommentText" name="comment[text]">${data.text}</textarea>
+                                                               <textarea type="text" class="form-control" id="inputCommentText" name="comment[text]">${data.comment.text}</textarea>
                                                              </div>
                                                        </div>
                                                        <div class="form-group">
@@ -56,7 +55,6 @@ $("#comments-list").on('submit','.form_comment-edit',function(e){
    e.preventDefault();
    var commentItem = $(this).serialize();
    var formAction = $(this).attr('action');
-   var aFormAction = formAction.split('/');
    var original = $(this).parent().parent('.card').children(".card-block");
    var form_edit = $(this);
    var button = "";
@@ -69,10 +67,10 @@ $("#comments-list").on('submit','.form_comment-edit',function(e){
             console.log(data);
             this.originalItem.html(
                `
-                <span><small class="text-muted pull-right"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;${moment(data.date).fromNow()}</small>
-                <span class="card-title"><strong><a href="/profile/${data.author.id}"><img style="max-width: 32px; border-radius: 50%;" src="${data.author.image}" alt="Author profile image">&nbsp;${data.author.username}</a></strong></span></span>
-                <p class="card-text">${data.text}</p>
-                <form class="form_comment-delete" action="/campgrounds/${aFormAction[2]}/comments/${data._id}" method="POST">
+                <span><small class="text-muted pull-right"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;${moment(data.comment.date).fromNow()}</small>
+                <span class="card-title"><strong><a href="/profile/${data.comment.author.id}"><img style="max-width: 32px; border-radius: 50%;" src="${data.comment.author.image}" alt="Author profile image">&nbsp;${data.comment.author.username}</a></strong></span></span>
+                <p class="card-text">${data.comment.text}</p>
+                <form class="form_comment-delete" action="/campgrounds/${data.camp_id}/comments/${data.comment._id}" method="POST">
                       <button class="btn btn-sm btn-danger pull-right">Delete</button>
                 </form>
                 <button class="btn btn-sm btn-warning pull-right button-edit">Edit</button>
