@@ -6,7 +6,7 @@ var middlewareObj = {
         logout: function(req,res,next){
                 if(!req.isAuthenticated()){
                         req.flash("error","You are not logged in");
-                        return req.redirect("/");
+                        return res.redirect("/");
                 }
                 req.logout();
                 req.flash("success","Logged you out");

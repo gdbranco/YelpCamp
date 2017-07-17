@@ -159,4 +159,39 @@ router.delete("/:id",middleware.checkCampOwner,function(req,res){
     });
 });
 
+//RATING ROUTE
+router.put("/:id/rating",function(req,res){
+    if(!req.isAuthenticated()){
+        res.json({redirect: "/login"});
+    }else{
+   Campground.findById(req.params.id,function(error,found){
+       if(error){
+           console.log(error);
+           req.flash("error","Something went wrong");
+           res.json({redirect : "/campgrounds/"+req.params.id});
+       }
+       var index = found.ratings.findIndex(function(item, i){
+          return item.user.equals(req.user._id);
+        });
+       console.log(index);
+       if(index!=-1){
+           found.ratings[index].rate = req.body.camp.rating;
+       }else{
+            var obj = {user: req.user._id, rate: req.body.camp.rating};
+            found.ratings.push(obj);
+       }
+       var avg = 0;
+            for(var i=0;i<found.ratings.length;i++){
+                avg += found.ratings[i].rate;
+            }
+       found.avg_rating = avg / found.ratings.length;
+        found.save();
+        console.log(found);
+        if(req.xhr){
+           res.json({camp: found, flash: {type: "success", msg: "You rated the campground."}});
+        }
+   }) ;
+    }
+});
+
 module.exports = router;

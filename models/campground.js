@@ -14,7 +14,8 @@ var campgroundSchema = new mongoose.Schema({
       username: String
    },
    comments: [{type: mongoose.Schema.Types.ObjectId, ref: "Comment"}],
-   rating: Number
+   ratings: [{ user: {type: mongoose.Schema.Types.ObjectId, ref: "User"}, rate: Number}],
+   avg_rating: {type: Number, default: 0}
 });
 //MODELS
 module.exports = mongoose.model("Campground",campgroundSchema);

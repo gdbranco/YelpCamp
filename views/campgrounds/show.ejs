@@ -17,6 +17,21 @@
                                 <div class="card-block">
                                         <h4 class="pull-right">$<%=camp.price%>/night</h4>
                                         <h4 class="card-title"><a href=""><%= camp.name %></a><br><small class="text-muted" style="font-size: 0.6em;">Submitted by <a href="/profile/<%=camp.author.id%>"><%=camp.author.username%></a>, <%= moment(camp.createdAt).fromNow() %></small></h4>
+                                        <p class="text-muted" id="avg_rating">Average Rating: <%=camp.avg_rating.toFixed(1)%>
+                                        <form id="rating">
+                                        <fieldset class="starability-basic form-group pull-right">
+                                                <input type="radio" id="first-rate1" name="camp[rating]" value="1" />
+                                                <label for="first-rate1" title="Terrible">1 star</label>
+                                                <input type="radio" id="first-rate2" name="camp[rating]" value="2" />
+                                                <label for="first-rate2" title="Not good">2 stars</label>
+                                                <input type="radio" id="first-rate3" name="camp[rating]" value="3" />
+                                                <label for="first-rate3" title="Average">3 stars</label>
+                                                <input type="radio" id="first-rate4" name="camp[rating]" value="4" />
+                                                <label for="first-rate4" title="Very good">4 stars</label>
+                                                <input type="radio" id="first-rate5" name="camp[rating]" value="5" />
+                                                <label for="first-rate5" title="Amazing">5 stars</label>
+                                        </fieldset></form></p>
+                                        
                                         <p class="card-text"><%- camp.desc %></p>
                                 </div>
                         </div>

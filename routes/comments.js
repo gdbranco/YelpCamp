@@ -19,7 +19,10 @@ router.get("/new",middleware.isLogged,function(req, res) {
 });
 
 //CREATE COMMENT
-router.post("/",middleware.isLogged,function(req, res){
+router.post("/",function(req, res){
+        if(!req.isAuthenticated()){
+                res.json({redirect: "/login"});
+        }else{
         //lookup camp by id
         Campground.findById(req.params.id,function(error, found) {
                 if(error)
@@ -52,7 +55,7 @@ router.post("/",middleware.isLogged,function(req, res){
                                 res.redirect("/campgrounds/"+req.params.id);
                         }
                 });
-        });
+        });}
         
 });
 
@@ -103,7 +106,10 @@ router.delete("/:comment_id",middleware.checkCommentOwner,function(req,res){
 });
 
 //LIKE ROUTE
-router.put("/:comment_id/like",middleware.isLogged,function(req,res){
+router.put("/:comment_id/like",function(req,res){
+        if(!req.isAuthenticated()){
+                res.json({redirect: "/login"});
+        }else{
         Comment.findById(req.params.comment_id, function(error, found){
                 if(error){
                         req.flash("error","Something went wrong.");
@@ -117,11 +123,14 @@ router.put("/:comment_id/like",middleware.isLogged,function(req,res){
                 }else{
                         res.redirect("/campgrounds/"+req.params.id);
                 }
-        });
+        });}
 });
 
 //DISLIKE ROUTE
 router.put("/:comment_id/dislike",middleware.isLogged,function(req,res){
+        if(!req.isAuthenticated()){
+                res.json({redirect: "/login"});
+        }else{
         Comment.findById(req.params.comment_id, function(error, found){
                 if(error){
                         req.flash("error","Something went wrong.");
@@ -135,7 +144,7 @@ router.put("/:comment_id/dislike",middleware.isLogged,function(req,res){
                 }else{
                         res.redirect("/campgrounds/"+req.params.id);
                 }
-        });
+        });}
 });
 
 module.exports = router;

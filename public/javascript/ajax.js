@@ -1,6 +1,27 @@
 /* global $ */
 /* global moment */
 
+$("#rating input").on('click',function(event){
+   event.preventDefault();
+   var original = $(this).parent().parent().parent().children("#avg_rating");
+   var url = window.location.pathname + "/rating";
+   var rating = $(this).serialize();
+   $.ajax({
+      url: url,
+      data: rating,
+      type: 'PUT',
+      originalItem: original,
+      success: function(data){
+         if(data.redirect){
+            window.location.replace(data.redirect);
+         }else{
+            this.originalItem.html("Average Rating: " + data.camp.avg_rating.toFixed(1));
+         }
+      }
+   });
+});
+
+
 $("#button_comment-add").on('click',function(event){
    event.preventDefault();
    $("#form_comment-new").slideToggle();
@@ -11,6 +32,9 @@ $("#form_comment-new").submit(function(event){
    var formData = $(this).serialize();
    var formAction = $(this).attr('action');
    $.post(formAction, formData, function(data){
+      if(data.redirect){
+            window.location.replace(data.redirect);
+         }else{
            $("#comments-list").prepend(
                `
                <div class="row">
@@ -43,7 +67,7 @@ $("#form_comment-new").submit(function(event){
                </div>
                `
             );
-            $("#comments-list").notify(data.flash.msg, {position: "top", className: data.flash.type});
+            $("#comments-list").notify(data.flash.msg, {position: "top", className: data.flash.type});}
    });
    $(this).slideToggle();
    $(this).find('.form-control').val('');
@@ -66,6 +90,9 @@ $("#comments-list").on('submit','.form_comment-edit',function(e){
          type: 'PUT',
          originalItem: original,
          success: function(data){
+            if(data.redirect){
+            window.location.replace(data.redirect);
+         }else{
             console.log(data);
             this.originalItem.html(
                `
@@ -81,7 +108,7 @@ $("#comments-list").on('submit','.form_comment-edit',function(e){
                );
                original.notify(data.flash.msg, {position: "top", className: data.flash.type});
                form_edit.slideToggle();
-         }
+         }}
    });
 });
 
@@ -96,9 +123,12 @@ $("#comments-list").on('submit', '.form_comment-delete', function(event){
            type: 'DELETE',
            itemToDelete: itemToDelete,
            success: function(data){
+              if(data.redirect){
+            window.location.replace(data.redirect);
+         }else{
                    this.itemToDelete.remove();
                      $("#comments-list").notify(data.flash.msg, { position:"top", className: data.flash.type});
-           }
+           }}
    });
    }
    else{
@@ -115,7 +145,9 @@ $("#comments-list").on('click','.button-like',function(e){
       type: 'PUT',
       originalItem: cardBlock,
       success: function(data){
-         console.log(data);
+         if(data.redirect){
+            window.location.replace(data.redirect);
+         }else{console.log(data);
          this.originalItem.html(
             `
              <span><small class="text-muted pull-right"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;${moment(data.comment.date).fromNow()}</small>
@@ -127,7 +159,7 @@ $("#comments-list").on('click','.button-like',function(e){
                    <button class="btn btn-sm btn-danger pull-right">Delete</button>
              </form>
              <button class="btn btn-sm btn-warning pull-right button-edit">Edit</button>
-            `);
+            `);}
       }
    });
 });
@@ -141,6 +173,9 @@ $("#comments-list").on('click','.button-dislike',function(e){
       type: 'PUT',
       originalItem: cardBlock,
       success: function(data){
+         if(data.redirect){
+            window.location.replace(data.redirect);
+         }else{
          console.log(data);
          this.originalItem.html(
             `
@@ -154,6 +189,6 @@ $("#comments-list").on('click','.button-dislike',function(e){
              </form>
              <button class="btn btn-sm btn-warning pull-right button-edit">Edit</button>
             `);
-      }
+      }}
    });
 });
