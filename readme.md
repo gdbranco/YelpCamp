@@ -1,5 +1,5 @@
 YelCamp Tutorial for Web Dev Bootcamp
 
-Added: Landing page, Friendly Messages with flash, Fuzzy Search, Admin role, User profiles, AJAX Comments
+Added: Landing page, Friendly Messages with flash, Fuzzy Search, Admin role, User profiles, AJAX Comments, Rating System
 
-Todo: Rating System, Learn and implement Angular?, Ajax Search
+Todo: Learn and implement Angular?, Ajax Search, uploading profile images
