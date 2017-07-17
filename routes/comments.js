@@ -41,14 +41,15 @@ router.post("/",middleware.isLogged,function(req, res){
                         comment.author.username = req.user.username;
                         comment.author.image = req.user.image;
                         comment.save();
+                        console.log(comment);
                         found.comments.push(comment);
                         found.save();
                         //redirect to comments of id
-                        req.flash("success","Comment created");
                         if(req.xhr){
-                                res.json({comment: comment, camp: found});
+                                res.json({comment: comment, camp: found, flash: {type: "success",msg:"Comment created."}});
                         }else{
-                        res.redirect("/campgrounds/"+req.params.id);
+                                req.flash("success","Comment created");
+                                res.redirect("/campgrounds/"+req.params.id);
                         }
                 });
         });
@@ -75,11 +76,12 @@ router.put("/:comment_id",middleware.checkCommentOwner,function(req,res){
                         req.flash("error","Something went wrong");
                         return res.redirect("back");
                 }
-                req.flash("success","Comment updated.");
+                console.log(updated);
                 if(req.xhr){
-                        res.json({comment: updated, camp_id: req.params.id});
+                        res.json({comment: updated, camp_id: req.params.id, flash: {type: "success", msg:"Comment updated."}});
                 }else{
-                res.redirect("/campgrounds/"+req.params.id);
+                        req.flash("success","Comment updated.");
+                        res.redirect("/campgrounds/"+req.params.id);
                 }
         });
 });
@@ -91,14 +93,49 @@ router.delete("/:comment_id",middleware.checkCommentOwner,function(req,res){
                       req.flash("error","Something went wrong");
                       return res.redirect("back");
               }
-              req.flash("success","Comment deleted.");
               if(req.xhr){
-                      res.json(removed);
+                      res.json({camp: removed, flash: {type: "success", msg: "Comment deleted."}});
               }else{
-              res.redirect("/campgrounds/"+req.params.id);
-                      
+                      req.flash("success","Comment deleted.");
+                      res.redirect("/campgrounds/"+req.params.id);
               }
       })  
+});
+
+//LIKE ROUTE
+router.put("/:comment_id/like",middleware.isLogged,function(req,res){
+        Comment.findById(req.params.comment_id, function(error, found){
+                if(error){
+                        req.flash("error","Something went wrong.");
+                        return res.redirect("back");
+                }
+                found.qtd_likes += 1;
+                found.likes.push(req.user._id);
+                found.save();
+                if(req.xhr){
+                        res.json({comment: found, camp_id: req.params.id});
+                }else{
+                        res.redirect("/campgrounds/"+req.params.id);
+                }
+        });
+});
+
+//DISLIKE ROUTE
+router.put("/:comment_id/dislike",middleware.isLogged,function(req,res){
+        Comment.findById(req.params.comment_id, function(error, found){
+                if(error){
+                        req.flash("error","Something went wrong.");
+                        return res.redirect("back");
+                }
+                found.qtd_likes -= 1;
+                found.likes.splice(found.likes.indexOf(req.user._id),1);
+                found.save();
+                if(req.xhr){
+                        res.json({comment: found, camp_id: req.params.id});
+                }else{
+                        res.redirect("/campgrounds/"+req.params.id);
+                }
+        });
 });
 
 module.exports = router;

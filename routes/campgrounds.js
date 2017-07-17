@@ -91,7 +91,8 @@ router.get("/:id",function(req, res) {
                    req.flash("error","Something went wrong");
                    return res.redirect("back");
                 }
-                found.comments.sort(function(l,r){return moment.utc(r.date).diff(moment.utc(l.date))});
+                //found.comments.sort(function(l,r){return moment.utc(r.date).diff(moment.utc(l.date))});
+                found.comments.sort(function(l,r){return l.qtd_likes < r.qtd_likes});
                 res.render("campgrounds/show",{camp: found});
         });
 });
