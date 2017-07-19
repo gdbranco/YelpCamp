@@ -1,5 +1,108 @@
 /* global $ */
 /* global moment */
+// FUZZY SEARCH
+$('#search-camps').on('keyup', 'input', function (e) {
+   e.preventDefault();
+   var form = $(this).parent().parent();
+   var formData = form.serialize();
+   var formAction = form.attr('action');
+   var originalList = form.parent().parent().parent().parent().children("#campgrounds-list").children(".row");
+   console.log(formData);
+   console.log(formAction);
+   console.log(originalList);
+    $.ajax({
+      type: "GET",
+      url: formAction,
+      data: formData,
+      success: function(data){
+         originalList.html("");
+         data.campgrounds.forEach(function(camp){
+            originalList.append(
+               `
+                <div class="col-md-3">
+                        <div class="card bg-faded">
+                                <img class="card-img-top" src="${camp.image}" alt="Card image cap">
+                                <div class="card-block">
+                                        <h4 class="card-title">${camp.name}</h4>
+                                        <a href="/campgrounds/${camp._id}"><button class="btn btn-outline-primary">More info</button></a>
+                                </div>
+                        </div>
+                </div>
+               `
+               );
+         });
+      }
+    });
+});
+
+function formatCamp (camp) {
+   if(camp.loading){
+      return camp.text;
+   }
+      var markup = 
+      `
+      <div class="container row result-camp">
+         <div class="col-sm-3">
+            <img src="${camp.image}">
+         </div>
+         <div class="col-sm-9">
+            <strong><p>${camp.name} - ${camp.avg_rating} - $${camp.price}</p></strong>
+            <p>${camp.location}</p>
+         </div>
+      </div>
+      `;
+      return markup;
+    }
+    
+function formatCampSelection (camp) {
+      return camp.full_name || camp.text;
+    }
+   
+
+$("#select_camp").select2({
+   placeholder: "Search for a campground...",
+  ajax: {
+    url: "/campgrounds",
+    dataType: 'json',
+    delay: 250,
+    data: function (params) {
+      return {
+        search: params.term, // search term
+        page: params.page || 1
+      };
+    },
+    processResults: function (data, params) {
+       // parse the results into the format expected by Select2
+       var select2data = $.map(data.campgrounds, function(obj) {
+            obj.id = obj.id || obj._id;
+            obj.full_name =
+            `
+            <strong><p>${obj.name} - ${obj.avg_rating} - $${obj.price}</p></strong>
+            `;
+            obj.text = obj.text || obj.name;
+            return obj;
+          });
+      // since we are using custom formatting functions we do not need to
+      // alter the remote JSON data, except to indicate that infinite
+      // scrolling can be used
+      return {
+        results: data.campgrounds,
+        pagination: {
+          more: (params.page * 30) < data.total_count
+        }
+      };
+    },
+    cache: true
+  },
+  escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+  minimumInputLength: 1,
+  templateResult: formatCamp,
+  templateSelection: formatCampSelection
+}).on('change', function(e){
+   console.log($(this).select2("val"));
+});
+
+//RATING
 
 $("#rating input").on('click',function(event){
    event.preventDefault();
@@ -21,6 +124,7 @@ $("#rating input").on('click',function(event){
    });
 });
 
+//ADD COMMENT
 
 $("#button_comment-add").on('click',function(event){
    event.preventDefault();
@@ -73,6 +177,8 @@ $("#form_comment-new").submit(function(event){
    $(this).find('.form-control').val('');
 });
 
+//EDIT COMMENT
+
 $("#comments-list").on('click', '.button-edit', function(){
    $(this).parent().parent().find('.form_comment-edit').slideToggle();
 });
@@ -112,6 +218,8 @@ $("#comments-list").on('submit','.form_comment-edit',function(e){
    });
 });
 
+//DELETE COMMENT
+
 $("#comments-list").on('submit', '.form_comment-delete', function(event){
    event.preventDefault();
    var confirmResponse = confirm("Are you sure?");
@@ -135,6 +243,8 @@ $("#comments-list").on('submit', '.form_comment-delete', function(event){
       $(this).find('button').blur();
    }
 });
+
+//LIKE - DISLIKE COMMENT
 
 $("#comments-list").on('click','.button-like',function(e){
    e.preventDefault();

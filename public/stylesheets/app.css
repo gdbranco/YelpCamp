@@ -3,6 +3,14 @@
   padding: 0;
   box-sizing: border-box; }
 
+select {
+  width: 100%; }
+
+.result-camp {
+  max-height: 100px; }
+  .result-camp img {
+    max-height: 100px; }
+
 button {
   cursor: pointer;
   margin: 0 2px 0 2px; }
@@ -47,6 +55,7 @@ a {
 img {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
+  height: auto;
   width: 100%;
   object-fit: cover; }
 

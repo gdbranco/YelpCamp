@@ -28,7 +28,11 @@ router.get("/",function(req, res) {
                 req.flash("warning","No match for that query, please try again.");
                 return res.redirect("back");
             }
+            if(req.xhr){
+                res.json({campgrounds: allCampgrounds});
+            }else{
             res.render("campgrounds/index",{campgrounds:allCampgrounds});
+            }
         });
     }else{
         Campground.find({},function(error,allCampgrounds){
@@ -38,7 +42,11 @@ router.get("/",function(req, res) {
                 req.flash("error","Something went wrong");
                 return res.redirect("back");
             }
+            if(req.xhr){
+                res.json({campgrounds: allCampgrounds});
+            }else{
             res.render("campgrounds/index",{campgrounds:allCampgrounds});
+            }
         });
     }
 });

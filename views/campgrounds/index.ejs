@@ -9,28 +9,31 @@
                                       <% if(currentUser) {%>
                                       <a href="/campgrounds/new"><button class="btn btn-primary btn-lg">Add new camp</button></a>
                                       <% } %>
-                                      <form action="/campgrounds" method="get" class="form-inline">
+                                      <form id="search-camps" action="/campgrounds" method="get" class="form-inline">
                                               <div class="form-group">
                                                       <input type="text" name="search" placeholder="Campground search..." class="form-control">
-                                                      <button type="submit" class="btn btn-secondary">Search</button>
                                               </div>
                                       </form>
+                                      <select id="select_camp" multiple="multiple">
+                                      </select>
+
                               </div>
                         </div>
                 </header>
-                <div class="row text-center" style="display:flex; flex-wrap: wrap;">
-                       <% campgrounds.forEach(function(camp) { %>
-                       <div class="col-md-3">
-                                <div class="card bg-faded">
-                                        <img class="card-img-top" src="<%= camp.image %>" alt="Card image cap">
-                                        <div class="card-block">
-                                                <h4 class="card-title"><%= camp.name %></h4>
-                                                <a href="/campgrounds/<%= camp._id %>"><button class="btn btn-outline-primary">More info</button></a>
+                <div id="campgrounds-list">
+                        <div class="row text-center" style="display:flex; flex-wrap: wrap;">
+                               <% campgrounds.forEach(function(camp) { %>
+                                       <div class="col-md-3">
+                                                <div class="card bg-faded">
+                                                        <img class="card-img-top" src="<%= camp.image %>" alt="Card image cap">
+                                                        <div class="card-block">
+                                                                <h4 class="card-title"><%= camp.name %></h4>
+                                                                <a href="/campgrounds/<%= camp._id %>"><button class="btn btn-outline-primary">More info</button></a>
+                                                        </div>
+                                                </div>
                                         </div>
-                                </div>
-                                
-                                </div>
-                        <% }); %> 
+                                <% }); %> 
+                        </div>
                 </div>
         </div>
 <% include ../partials/footer %>
