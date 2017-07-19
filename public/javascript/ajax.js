@@ -7,15 +7,15 @@ $('#search-camps').on('keyup', 'input', function (e) {
    var formData = form.serialize();
    var formAction = form.attr('action');
    var originalList = form.parent().parent().parent().parent().children("#campgrounds-list").children(".row");
-   console.log(formData);
-   console.log(formAction);
-   console.log(originalList);
     $.ajax({
       type: "GET",
       url: formAction,
       data: formData,
       success: function(data){
          originalList.html("");
+         if(data.flash){
+               $("#search-camps").notify(data.flash.msg, {position: "top", className: data.flash.type});
+         }else{
          data.campgrounds.forEach(function(camp){
             originalList.append(
                `
@@ -31,6 +31,7 @@ $('#search-camps').on('keyup', 'input', function (e) {
                `
                );
          });
+         }
       }
     });
 });
@@ -60,6 +61,7 @@ function formatCampSelection (camp) {
    
 
 $("#select_camp").select2({
+   allowClear: true,
    placeholder: "Search for a campground...",
   ajax: {
     url: "/campgrounds",
@@ -73,6 +75,9 @@ $("#select_camp").select2({
     },
     processResults: function (data, params) {
        // parse the results into the format expected by Select2
+       if(data.flash){
+         $("#select_camp").notify(data.flash.msg, {position: "top", className: data.flash.type});
+       }else{
        var select2data = $.map(data.campgrounds, function(obj) {
             obj.id = obj.id || obj._id;
             obj.full_name =
@@ -82,6 +87,7 @@ $("#select_camp").select2({
             obj.text = obj.text || obj.name;
             return obj;
           });
+       
       // since we are using custom formatting functions we do not need to
       // alter the remote JSON data, except to indicate that infinite
       // scrolling can be used
@@ -90,7 +96,7 @@ $("#select_camp").select2({
         pagination: {
           more: (params.page * 30) < data.total_count
         }
-      };
+      };}
     },
     cache: true
   },

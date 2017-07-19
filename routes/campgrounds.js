@@ -15,21 +15,16 @@ function escapeRegex(text){
 //======================
 //INDEX CAMPGROUNDS - show all
 router.get("/",function(req, res) {
-    if(req.query.search){
+    if(req.query.search && req.query.search != ""){
         const regex = new RegExp(escapeRegex(req.query.search), 'gi');
         Campground.find({name: regex},function(error,allCampgrounds){
-            if(error)
-            {
-                console.log(error);
-                req.flash("error","Something went wrong");
-                return res.redirect("back");
-            }
-            if(allCampgrounds.length < 1){
-                req.flash("warning","No match for that query, please try again.");
-                return res.redirect("back");
-            }
             if(req.xhr){
-                res.json({campgrounds: allCampgrounds});
+                if(allCampgrounds.length < 1){
+                    res.json({campgrounds: null, flash: {type: "warn", msg: "No campground found."}});
+                }
+                else{
+                    res.json({campgrounds: allCampgrounds});
+                }
             }else{
             res.render("campgrounds/index",{campgrounds:allCampgrounds});
             }
